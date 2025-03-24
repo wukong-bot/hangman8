@@ -229,6 +229,12 @@
         let timeLeft = 30;
         const timerElement = document.getElementById('timer');
 
+        const correctSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2069/2069.wav');
+        const wrongSound = new Audio('https://static.bandlab.com/on-demand-revisions/d8cc417a-cf5a-66dc-a2c7-3659a6faf55d/d8cc417a-cf5a-66dc-a2c7-3659a6faf55d-mp3-44100-16bit-320kbps.mp3');
+        const winSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2059/2059.wav');
+        const loseSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2042/2042.wav');
+        const countdownSound = new Audio('https://assets.mixkit.co/active_storage/sfx/921/921.wav');
+
         function displayWord() {
             let display = "";
             for (let letter of wordToGuess) {
@@ -261,9 +267,12 @@
             if (!wordToGuess.toLowerCase().includes(guess)) {
                 wrongGuesses++;
                 drawHangman();
+                wrongSound.play();
                 if (wrongGuesses === maxWrongGuesses) {
                     showResult(false);
                 }
+            } else {
+                correctSound.play();
             }
 
             if (!guessedLetters.includes(guess)) {
@@ -295,12 +304,14 @@
                 document.querySelector('.you-lose').style.display = 'none';
                 document.querySelector('.answer-label').style.display = 'none';
                 document.querySelector('.answer-word').style.display = 'none';
+                winSound.play();
             } else {
                 document.querySelector('.you-win').style.display = 'none';
                 document.querySelector('.congratulations').style.display = 'none';
                 document.querySelector('.you-lose').style.display = 'block';
                 document.querySelector('.answer-label').style.display = 'inline';
                 document.querySelector('.answer-word').textContent = wordToGuess;
+                loseSound.play();
             }
         }
 
@@ -308,6 +319,9 @@
             const timerInterval = setInterval(() => {
                 timeLeft--;
                 timerElement.textContent = timeLeft;
+                if (timeLeft === 15) {
+                    countdownSound.play();
+                }
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     if (!isGameOver) {
@@ -323,5 +337,4 @@
     </script>
 </body>
 
-</html>
-    
+</html>    
